@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutomobileManagement.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace AutomobileManagement.DBContext
         {
 
         }
+
+        public DbSet<Make> Makes { get; set; }
     }
 }

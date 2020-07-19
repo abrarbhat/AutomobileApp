@@ -1,5 +1,6 @@
 using AutoMapper;
 using AutomobileManagement.DBContext;
+using AutomobileManagement.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,13 +24,24 @@ namespace AutomobileManagement
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //var val = Configuration.GetConnectionString("Default");
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
 
-            //services.AddDbContext<AutomobileDbContext>(_ => _.UseSqlServer(val));
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            //services.AddAutoMapper();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            var val = Configuration.GetConnectionString("Default");
+
+            
+            services.AddDbContext<AutomobileDbContext>(_ => _.UseSqlServer(val));
 
             // In production, the Angular files will be served from this directory
-            //services.AddAutoMapper();
+            
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
